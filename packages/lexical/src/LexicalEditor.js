@@ -322,6 +322,7 @@ export class LexicalEditor {
   _onError: ErrorHandler;
   _htmlConversions: DOMConversionCache;
   _readOnly: boolean;
+  _latestFormatChange: number;
 
   constructor(
     editorState: EditorState,
@@ -378,6 +379,7 @@ export class LexicalEditor {
     this._onError = onError;
     this._htmlConversions = htmlConversions;
     this._readOnly = false;
+    this._latestFormatChange = 0;
   }
   isComposing(): boolean {
     return this._compositionKey != null;

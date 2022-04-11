@@ -10,13 +10,10 @@ import {redo, undo} from '../keyboardShortcuts/index.mjs';
 import {
   assertHTML,
   assertSelection,
-  click,
   focusEditor,
-  html,
   initialize,
   keyDownCtrlOrMeta,
   keyUpCtrlOrMeta,
-  pasteFromClipboard,
   repeat,
   test,
 } from '../utils/index.mjs';
@@ -41,27 +38,27 @@ async function checkHTMLExpectationsIncludingUndoRedo(
 test.describe('Markdown', () => {
   test.beforeEach(({isCollab, page}) => initialize({isCollab, page}));
   const triggersAndExpectations = [
-    {
-      expectation:
-        '<p class="PlaygroundEditorTheme__paragraph"><a href="http://www.test.com" class="PlaygroundEditorTheme__link PlaygroundEditorTheme__ltr" dir="ltr"><span data-lexical-text="true">hello world</span></a><span data-lexical-text="true"> </span></p>',
-      isBlockTest: true,
-      markdownText: '[hello world](http://www.test.com) ', // Link
-      undoHTML: `<p class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr" dir="ltr"><span data-lexical-text="true">[hello world](http://www.test.com) </span></p>`,
-    },
-    {
-      expectation:
-        '<p class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr" dir="ltr"><span data-lexical-text="true">x</span><strong class="PlaygroundEditorTheme__textBold" data-lexical-text="true">hello</strong><span data-lexical-text="true"> y</span></p>',
-      isBlockTest: false,
-      markdownText: '__hello__',
-      stylizedExpectation:
-        '<p class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr" dir="ltr"><span data-lexical-text="true" class="PlaygroundEditorTheme__textUnderline">x</span><strong class="PlaygroundEditorTheme__textBold" data-lexical-text="true">hello</strong><span class="PlaygroundEditorTheme__textUnderline" data-lexical-text="true"> y</span></p>',
-      // bold.
-      stylizedUndoHTML:
-        '<p class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr" dir="ltr"><span data-lexical-text="true" class="PlaygroundEditorTheme__textUnderline">x_</span><span data-lexical-text="true">_hello_</span><span class="PlaygroundEditorTheme__textUnderline" data-lexical-text="true">_ y</span></p>',
+    // {
+    //   expectation:
+    //     '<p class="PlaygroundEditorTheme__paragraph"><a href="http://www.test.com" class="PlaygroundEditorTheme__link PlaygroundEditorTheme__ltr" dir="ltr"><span data-lexical-text="true">hello world</span></a><span data-lexical-text="true"> </span></p>',
+    //   isBlockTest: true,
+    //   markdownText: '[hello world](http://www.test.com) ', // Link
+    //   undoHTML: `<p class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr" dir="ltr"><span data-lexical-text="true">[hello world](http://www.test.com) </span></p>`,
+    // },
+    // {
+    //   expectation:
+    //     '<p class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr" dir="ltr"><span data-lexical-text="true">x</span><strong class="PlaygroundEditorTheme__textBold" data-lexical-text="true">hello</strong><span data-lexical-text="true"> y</span></p>',
+    //   isBlockTest: false,
+    //   markdownText: '__hello__',
+    //   stylizedExpectation:
+    //     '<p class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr" dir="ltr"><span data-lexical-text="true" class="PlaygroundEditorTheme__textUnderline">x</span><strong class="PlaygroundEditorTheme__textBold" data-lexical-text="true">hello</strong><span class="PlaygroundEditorTheme__textUnderline" data-lexical-text="true"> y</span></p>',
+    //   // bold.
+    //   stylizedUndoHTML:
+    //     '<p class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr" dir="ltr"><span data-lexical-text="true" class="PlaygroundEditorTheme__textUnderline">x_</span><span data-lexical-text="true">_hello_</span><span class="PlaygroundEditorTheme__textUnderline" data-lexical-text="true">_ y</span></p>',
 
-      undoHTML:
-        '<p class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr" dir="ltr"><span data-lexical-text="true">x__hello__ y</span></p>',
-    },
+    //   undoHTML:
+    //     '<p class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr" dir="ltr"><span data-lexical-text="true">x__hello__ y</span></p>',
+    // },
     {
       expectation: '<h1 class="PlaygroundEditorTheme__h1"><br></h1>',
       isBlockTest: true,
@@ -133,36 +130,36 @@ test.describe('Markdown', () => {
 
       undoHTML: '', // HR Rule.
     },
-    {
-      expectation:
-        '<p class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr" dir="ltr"><strong class="PlaygroundEditorTheme__textBold PlaygroundEditorTheme__textItalic PlaygroundEditorTheme__textStrikethrough" data-lexical-text="true">test</strong><span data-lexical-text="true"></span></p>',
-      isBlockTest: true,
-      markdownText: '~~_**test**_~~ ',
-      undoHTML: 'none', // strikethru, italic, bold
-    },
-    {
-      expectation:
-        '<p class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr" dir="ltr"><em class="PlaygroundEditorTheme__textItalic PlaygroundEditorTheme__textStrikethrough" data-lexical-text="true">test</em><span data-lexical-text="true"></span></p>',
-      isBlockTest: true,
-      markdownText: '~~_test_~~ ',
-      undoHTML: 'none', // strikethru, italic
-    },
-    {
-      expectation:
-        '<p class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr" dir="ltr"><strong class="PlaygroundEditorTheme__textBold PlaygroundEditorTheme__textStrikethrough" data-lexical-text="true">test</strong><span data-lexical-text="true"></span></p>',
-      isBlockTest: true,
-      markdownText: '~~**test**~~ ',
-      undoHTML: 'none', // strikethru, bold
-    },
+    // {
+    //   expectation:
+    //     '<p class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr" dir="ltr"><strong class="PlaygroundEditorTheme__textBold PlaygroundEditorTheme__textItalic PlaygroundEditorTheme__textStrikethrough" data-lexical-text="true">test</strong><span data-lexical-text="true"></span></p>',
+    //   isBlockTest: true,
+    //   markdownText: '~~_**test**_~~ ',
+    //   undoHTML: 'none', // strikethru, italic, bold
+    // },
+    // {
+    //   expectation:
+    //     '<p class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr" dir="ltr"><em class="PlaygroundEditorTheme__textItalic PlaygroundEditorTheme__textStrikethrough" data-lexical-text="true">test</em><span data-lexical-text="true"></span></p>',
+    //   isBlockTest: true,
+    //   markdownText: '~~_test_~~ ',
+    //   undoHTML: 'none', // strikethru, italic
+    // },
+    // {
+    //   expectation:
+    //     '<p class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr" dir="ltr"><strong class="PlaygroundEditorTheme__textBold PlaygroundEditorTheme__textStrikethrough" data-lexical-text="true">test</strong><span data-lexical-text="true"></span></p>',
+    //   isBlockTest: true,
+    //   markdownText: '~~**test**~~ ',
+    //   undoHTML: 'none', // strikethru, bold
+    // },
 
-    {
-      expectation:
-        '<p class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr" dir="ltr"><strong class="PlaygroundEditorTheme__textBold PlaygroundEditorTheme__textItalic" data-lexical-text="true">test</strong><span data-lexical-text="true"></span></p>',
-      isBlockTest: true,
-      markdownText: '_**test**_ ',
+    // {
+    //   expectation:
+    //     '<p class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr" dir="ltr"><strong class="PlaygroundEditorTheme__textBold PlaygroundEditorTheme__textItalic" data-lexical-text="true">test</strong><span data-lexical-text="true"></span></p>',
+    //   isBlockTest: true,
+    //   markdownText: '_**test**_ ',
 
-      undoHTML: 'none', // italic, bold
-    },
+    //   undoHTML: 'none', // italic, bold
+    // },
   ];
   // forward case is the normal case.
   // undo case is when the user presses undo.
@@ -311,81 +308,4 @@ test.describe('Markdown', () => {
       });
     }
   }
-  test(`Should test markdown conversion from plain text to Lexical.`, async ({
-    page,
-    isPlainText,
-    isCollab,
-  }) => {
-    test.skip(isPlainText);
-    await focusEditor(page);
-    const text = [
-      '# Heading',
-      '- unordered list',
-      '    - nested',
-      '1. ordered list',
-      '    1. nested',
-    ].join('\n');
-    await pasteFromClipboard(page, {
-      'text/plain': text,
-    });
-    await click(page, 'i.markdown');
-
-    await assertHTML(
-      page,
-      html`
-        <h1
-          class="PlaygroundEditorTheme__h1 PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
-          <span data-lexical-text="true">Heading</span>
-        </h1>
-        <ul class="PlaygroundEditorTheme__ul">
-          <li
-            class="PlaygroundEditorTheme__listItem PlaygroundEditorTheme__ltr"
-            dir="ltr"
-            value="1"
-          >
-            <span data-lexical-text="true">unordered list</span>
-          </li>
-          <li
-            class="PlaygroundEditorTheme__listItem PlaygroundEditorTheme__nestedListItem"
-            value="2"
-          >
-            <ul class="PlaygroundEditorTheme__ul">
-              <li
-                class="PlaygroundEditorTheme__listItem PlaygroundEditorTheme__ltr"
-                dir="ltr"
-                value="1"
-              >
-                <span data-lexical-text="true">nested</span>
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <ol class="PlaygroundEditorTheme__ol1">
-          <li
-            class="PlaygroundEditorTheme__listItem PlaygroundEditorTheme__ltr"
-            dir="ltr"
-            value="1"
-          >
-            <span data-lexical-text="true">ordered list</span>
-          </li>
-          <li
-            class="PlaygroundEditorTheme__listItem PlaygroundEditorTheme__nestedListItem"
-            value="2"
-          >
-            <ol class="PlaygroundEditorTheme__ol2">
-              <li
-                class="PlaygroundEditorTheme__listItem PlaygroundEditorTheme__ltr"
-                dir="ltr"
-                value="1"
-              >
-                <span data-lexical-text="true">nested</span>
-              </li>
-            </ol>
-          </li>
-        </ol>
-      `,
-    );
-  });
 });

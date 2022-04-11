@@ -523,3 +523,21 @@ export async function insertTable(page) {
     'div[data-test-id="table-model-confirm-insert"] > .Button__root',
   );
 }
+
+export async function pressToggleBold(page) {
+  await keyDownCtrlOrMeta(page);
+  await page.keyboard.press('b');
+  await keyUpCtrlOrMeta(page);
+}
+
+export async function pressToggleItalic(page) {
+  await keyDownCtrlOrMeta(page);
+  await page.keyboard.press('b');
+  await keyUpCtrlOrMeta(page);
+}
+
+export async function pressToggleUnderline(page) {
+  await keyDownCtrlOrMeta(page);
+  await page.keyboard.press('u');
+  await keyUpCtrlOrMeta(page);
+}

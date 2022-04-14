@@ -11,9 +11,9 @@ import type {CommandListenerEditorPriority, LexicalCommand} from 'lexical';
 
 import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
 import {
-  $createParagraphNode,
   $getSelection,
   $isRangeSelection,
+  $isRootNode,
   createCommand,
 } from 'lexical';
 import {useEffect} from 'react';
@@ -37,17 +37,11 @@ export default function TwitterPlugin(): React$Node {
       (payload) => {
         const selection = $getSelection();
         if ($isRangeSelection(selection)) {
-          const focusNode = selection.focus.getNode();
-          if (focusNode !== null) {
-            const tweetNode = $createTweetNode(payload);
-            selection.focus
-              .getNode()
-              .getTopLevelElementOrThrow()
-              .insertAfter(tweetNode);
-            const paragraphNode = $createParagraphNode();
-            tweetNode.insertAfter(paragraphNode);
-            paragraphNode.select();
+          const tweetNode = $createTweetNode(payload);
+          if ($isRootNode(selection.anchor.getNode())) {
+            selection.insertParagraph();
           }
+          selection.insertNodes([tweetNode]);
         }
         return true;
       },

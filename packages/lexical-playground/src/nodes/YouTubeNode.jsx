@@ -62,7 +62,8 @@ export class YouTubeNode extends DecoratorNode<React$Node> {
   }
 
   createDOM(): HTMLElement {
-    return document.createElement('div');
+    const elem = document.createElement('span');
+    return elem;
   }
 
   updateDOM(): false {

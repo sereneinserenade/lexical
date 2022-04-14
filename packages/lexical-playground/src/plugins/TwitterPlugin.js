@@ -10,14 +10,10 @@
 import type {CommandListenerEditorPriority, LexicalCommand} from 'lexical';
 
 import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {
-  $getSelection,
-  $isRangeSelection,
-  $isRootNode,
-  createCommand,
-} from 'lexical';
+import {$getSelection, $isRangeSelection, createCommand} from 'lexical';
 import {useEffect} from 'react';
 
+import {$createEmbedNode} from '../nodes/EmbedNode.jsx';
 import {$createTweetNode, TweetNode} from '../nodes/TweetNode.jsx';
 
 const EditorPriority: CommandListenerEditorPriority = 0;
@@ -36,12 +32,18 @@ export default function TwitterPlugin(): React$Node {
       INSERT_TWEET_COMMAND,
       (payload) => {
         const selection = $getSelection();
-        if ($isRangeSelection(selection)) {
+        if (!$isRangeSelection(selection)) {
+          return false;
+        }
+        const focusNode = selection.focus.getNode();
+        if (focusNode !== null) {
           const tweetNode = $createTweetNode(payload);
-          if ($isRootNode(selection.anchor.getNode())) {
-            selection.insertParagraph();
-          }
-          selection.insertNodes([tweetNode]);
+          const embedNode = $createEmbedNode();
+          embedNode.insertAfter(tweetNode);
+          selection.focus
+            .getNode()
+            .getTopLevelElementOrThrow()
+            .insertBefore(embedNode);
         }
         return true;
       },

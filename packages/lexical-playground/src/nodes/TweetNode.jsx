@@ -97,7 +97,9 @@ export class TweetNode extends DecoratorNode<React$Node> {
   }
 
   createDOM(): HTMLElement {
-    return document.createElement('div');
+    const elem = document.createElement('div');
+    elem.style.display = 'inline-block';
+    return elem;
   }
 
   updateDOM(): false {

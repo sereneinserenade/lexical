@@ -11,13 +11,14 @@ import type {CommandListenerEditorPriority, LexicalCommand} from 'lexical';
 
 import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
 import {
+  $createParagraphNode,
   $getSelection,
   $isRangeSelection,
-  $isRootNode,
   createCommand,
 } from 'lexical';
 import {useEffect} from 'react';
 
+import {$createEmbedNode} from '../nodes/EmbedNode.jsx';
 import {$createYouTubeNode, YouTubeNode} from '../nodes/YouTubeNode.jsx';
 
 const EditorPriority: CommandListenerEditorPriority = 0;
@@ -36,12 +37,17 @@ export default function YouTubePlugin(): React$Node {
       INSERT_YOUTUBE_COMMAND,
       (payload) => {
         const selection = $getSelection();
-        if ($isRangeSelection(selection)) {
-          const tweetNode = $createYouTubeNode(payload);
-          if ($isRootNode(selection.anchor.getNode())) {
-            selection.insertParagraph();
-          }
-          selection.insertNodes([tweetNode]);
+        if (!$isRangeSelection(selection)) {
+          return false;
+        }
+        const focusNode = selection.focus.getNode();
+        if (focusNode !== null) {
+          const embedNode = $createEmbedNode();
+          const youTubeNode = $createYouTubeNode(payload);
+          const topLevelNode = focusNode.getTopLevelElementOrThrow();
+          topLevelNode.insertAfter(embedNode);
+          embedNode.append(youTubeNode);
+          embedNode.insertAfter($createParagraphNode());
         }
         return true;
       },

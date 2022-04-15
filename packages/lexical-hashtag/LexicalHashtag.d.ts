@@ -13,7 +13,7 @@ export declare class HashtagNode extends TextNode {
   getType(): string;
   clone(node: HashtagNode): HashtagNode;
   constructor(text: string, key?: NodeKey);
-  createDOM<EditorContext>(config: EditorConfig<EditorContext>): HTMLElement;
+  createDOM(config: EditorConfig): HTMLElement;
   canInsertTextBefore(): boolean;
   isTextEntity(): true;
 }

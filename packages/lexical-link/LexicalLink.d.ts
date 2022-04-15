@@ -15,17 +15,18 @@ import type {
   RangeSelection,
   LexicalCommand,
 } from 'lexical';
+import {ElementNode} from 'lexical';
 
 export declare class LinkNode extends ElementNode {
   __url: string;
   static getType(): string;
   static clone(node: LinkNode): LinkNode;
-  constructor(url: string, key?: NodeKey): void;
-  createDOM<EditorContext>(config: EditorConfig<EditorContext>): HTMLElement;
-  updateDOM<EditorContext>(
+  constructor(url: string, key?: NodeKey);
+  createDOM(config: EditorConfig): HTMLElement;
+  updateDOM(
     prevNode: LinkNode,
     dom: HTMLElement,
-    config: EditorConfig<EditorContext>,
+    config: EditorConfig,
   ): boolean;
   static importDOM(): DOMConversionMap | null;
   getURL(): string;

@@ -222,8 +222,7 @@ function StickyComponent({
           document.addEventListener('pointerup', handlePointerUp);
           event.preventDefault();
         }
-      }}
-    >
+      }}>
       <button onClick={handleDelete} className="delete">
         X
       </button>
@@ -232,8 +231,7 @@ function StickyComponent({
       </button>
       <LexicalNestedComposer
         initialEditor={caption}
-        initialTheme={StickyEditorTheme}
-      >
+        initialTheme={StickyEditorTheme}>
         {isCollab ? (
           <CollaborationPlugin
             id={caption.getKey()}
@@ -292,7 +290,7 @@ export class StickyNode extends DecoratorNode<React$Node> {
     this.__color = color;
   }
 
-  createDOM<EditorContext>(config: EditorConfig<EditorContext>): HTMLElement {
+  createDOM(config: EditorConfig): HTMLElement {
     const div = document.createElement('div');
     div.style.display = 'contents';
     return div;

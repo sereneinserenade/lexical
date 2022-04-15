@@ -96,7 +96,7 @@ export class QuoteNode extends ElementNode {
 
   // View
 
-  createDOM<EditorContext>(config: EditorConfig<EditorContext>): HTMLElement {
+  createDOM(config: EditorConfig): HTMLElement {
     const element = document.createElement('blockquote');
     addClassNamesToElement(element, config.theme.quote);
     return element;
@@ -156,7 +156,7 @@ export class HeadingNode extends ElementNode {
 
   // View
 
-  createDOM<EditorContext>(config: EditorConfig<EditorContext>): HTMLElement {
+  createDOM(config: EditorConfig): HTMLElement {
     const tag = this.__tag;
     const element = document.createElement(tag);
     const theme = config.theme;

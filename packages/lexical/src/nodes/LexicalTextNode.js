@@ -205,13 +205,13 @@ function setTextContent(
   }
 }
 
-function createTextInnerDOM<EditorContext>(
+function createTextInnerDOM(
   innerDOM: HTMLElement,
   node: TextNode,
   innerTag: string,
   format: number,
   text: string,
-  config: EditorConfig<EditorContext>,
+  config: EditorConfig,
 ): void {
   setTextContent(text, innerDOM, node);
   const theme = config.theme;
@@ -310,10 +310,7 @@ export class TextNode extends LexicalNode {
 
   // View
 
-  // $FlowFixMe: Revise typings for EditorContext
-  createDOM<EditorContext: Object>(
-    config: EditorConfig<EditorContext>,
-  ): HTMLElement {
+  createDOM(config: EditorConfig): HTMLElement {
     const format = this.__format;
     const outerTag = getElementOuterTag(this, format);
     const innerTag = getElementInnerTag(this, format);
@@ -332,11 +329,11 @@ export class TextNode extends LexicalNode {
     }
     return dom;
   }
-  // $FlowFixMe: Revise typings for EditorContext
-  updateDOM<EditorContext: Object>(
+
+  updateDOM(
     prevNode: TextNode,
     dom: HTMLElement,
-    config: EditorConfig<EditorContext>,
+    config: EditorConfig,
   ): boolean {
     const nextText = this.__text;
     const prevFormat = prevNode.__format;

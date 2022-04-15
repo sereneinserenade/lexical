@@ -131,8 +131,7 @@ function ExcalidrawComponent({
       />
       <button
         ref={buttonRef}
-        className={`excalidraw-button ${isSelected ? 'selected' : ''}`}
-      >
+        className={`excalidraw-button ${isSelected ? 'selected' : ''}`}>
         <ExcalidrawImage className="image" elements={elements} />
       </button>
     </>
@@ -156,7 +155,7 @@ export class ExcalidrawNode extends DecoratorNode<React$Node> {
   }
 
   // View
-  createDOM<EditorContext>(config: EditorConfig<EditorContext>): HTMLElement {
+  createDOM(config: EditorConfig): HTMLElement {
     const span = document.createElement('span');
     const theme = config.theme;
     const className = theme.image;

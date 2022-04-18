@@ -20,8 +20,7 @@ function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <header
-      className={clsx('hero hero--dark hero--primary', styles.heroBanner)}
-    >
+      className={clsx('hero hero--dark hero--primary', styles.heroBanner)}>
       <div className="container">
         <h1 className="hero__title">
           <img
@@ -36,15 +35,13 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary margin-right--sm"
-            to="/docs/intro"
-          >
+            to="/docs/intro">
             Get Started
           </Link>
           <Link
             className="button button--outline margin-left--sm"
-            to="/docs/intro"
-          >
-            Learn More
+            to="https://playground.lexical.dev">
+            Visit Playground
           </Link>
         </div>
       </div>

@@ -8,9 +8,12 @@
 
 import {
   moveLeft,
+  moveRight,
+  moveToLineBeginning,
   moveToLineEnd,
   selectAll,
   selectCharacters,
+  toggleBold,
 } from '../keyboardShortcuts/index.mjs';
 import {
   assertHTML,
@@ -20,7 +23,6 @@ import {
   focusEditor,
   html,
   initialize,
-  repeat,
   test,
   waitForSelector,
 } from '../utils/index.mjs';
@@ -41,8 +43,7 @@ test.describe('Links', () => {
       html`
         <p
           class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <span data-lexical-text="true">Hello</span>
         </p>
       `,
@@ -56,13 +57,11 @@ test.describe('Links', () => {
       html`
         <p
           class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <a
             href="https://"
             class="PlaygroundEditorTheme__link PlaygroundEditorTheme__ltr"
-            dir="ltr"
-          >
+            dir="ltr">
             <span data-lexical-text="true">Hello</span>
           </a>
         </p>
@@ -90,13 +89,11 @@ test.describe('Links', () => {
       html`
         <p
           class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <a
             href="https://facebook.com"
             class="PlaygroundEditorTheme__link PlaygroundEditorTheme__ltr"
-            dir="ltr"
-          >
+            dir="ltr">
             <span data-lexical-text="true">Hello</span>
           </a>
         </p>
@@ -118,8 +115,7 @@ test.describe('Links', () => {
       html`
         <p
           class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <span data-lexical-text="true">Hello</span>
         </p>
       `,
@@ -144,8 +140,7 @@ test.describe('Links', () => {
       html`
         <p
           class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <span data-lexical-text="true">Hello</span>
         </p>
       `,
@@ -159,8 +154,7 @@ test.describe('Links', () => {
       html`
         <p
           class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <span data-lexical-text="true">Hello</span>
         </p>
       `,
@@ -183,8 +177,7 @@ test.describe('Links', () => {
       html`
         <p
           class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <span data-lexical-text="true">An Awesome Website</span>
         </p>
       `,
@@ -196,13 +189,11 @@ test.describe('Links', () => {
       html`
         <p
           class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <a
             href="https://"
             class="PlaygroundEditorTheme__link PlaygroundEditorTheme__ltr"
-            dir="ltr"
-          >
+            dir="ltr">
             <span data-lexical-text="true">An Awesome Website</span>
           </a>
         </p>
@@ -219,14 +210,12 @@ test.describe('Links', () => {
       html`
         <p
           class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <span data-lexical-text="true">Hey, check this out:</span>
           <a
             href="https://"
             class="PlaygroundEditorTheme__link PlaygroundEditorTheme__ltr"
-            dir="ltr"
-          >
+            dir="ltr">
             <span data-lexical-text="true">An Awesome Website</span>
           </a>
           <span data-lexical-text="true">!</span>
@@ -247,8 +236,7 @@ test.describe('Links', () => {
       html`
         <p
           class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <span data-lexical-text="true">Hello world</span>
         </p>
       `,
@@ -265,14 +253,12 @@ test.describe('Links', () => {
       html`
         <p
           class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <span data-lexical-text="true">Hello</span>
           <a
             href="https://"
             class="PlaygroundEditorTheme__link PlaygroundEditorTheme__ltr"
-            dir="ltr"
-          >
+            dir="ltr">
             <span data-lexical-text="true">world</span>
           </a>
         </p>
@@ -305,14 +291,12 @@ test.describe('Links', () => {
       html`
         <p
           class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <span data-lexical-text="true">Hello</span>
           <a
             href="https://facebook.com"
             class="PlaygroundEditorTheme__link PlaygroundEditorTheme__ltr"
-            dir="ltr"
-          >
+            dir="ltr">
             <span data-lexical-text="true">world</span>
           </a>
         </p>
@@ -343,8 +327,7 @@ test.describe('Links', () => {
       html`
         <p
           class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <span data-lexical-text="true">Hello world</span>
         </p>
       `,
@@ -370,8 +353,7 @@ test.describe('Links', () => {
       html`
         <p
           class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <span data-lexical-text="true">Hello world</span>
         </p>
       `,
@@ -387,14 +369,12 @@ test.describe('Links', () => {
       html`
         <p
           class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <span data-lexical-text="true">Hello</span>
           <a
             href="https://"
             class="PlaygroundEditorTheme__link PlaygroundEditorTheme__ltr"
-            dir="ltr"
-          >
+            dir="ltr">
             <span data-lexical-text="true">world</span>
           </a>
         </p>
@@ -428,14 +408,12 @@ test.describe('Links', () => {
       html`
         <p
           class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <span data-lexical-text="true">Hello</span>
           <a
             href="https://facebook.com"
             class="PlaygroundEditorTheme__link PlaygroundEditorTheme__ltr"
-            dir="ltr"
-          >
+            dir="ltr">
             <span data-lexical-text="true">world</span>
           </a>
         </p>
@@ -466,8 +444,7 @@ test.describe('Links', () => {
       html`
         <p
           class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <span data-lexical-text="true">Hello world</span>
         </p>
       `,
@@ -488,9 +465,7 @@ test.describe('Links', () => {
     await focusEditor(page);
     await page.keyboard.type('Hello world');
 
-    await repeat(5, async () => {
-      await page.keyboard.press('ArrowLeft');
-    });
+    await moveLeft(page, 5);
 
     await click(page, '.link');
 
@@ -499,14 +474,12 @@ test.describe('Links', () => {
       html`
         <p
           class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <span data-lexical-text="true">Hello</span>
           <a
             href="https://"
             class="PlaygroundEditorTheme__link PlaygroundEditorTheme__ltr"
-            dir="ltr"
-          >
+            dir="ltr">
             <span data-lexical-text="true">world</span>
           </a>
         </p>
@@ -523,14 +496,12 @@ test.describe('Links', () => {
       html`
         <h1
           class="PlaygroundEditorTheme__h1 PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <span data-lexical-text="true">Hello</span>
           <a
             href="https://"
             class="PlaygroundEditorTheme__link PlaygroundEditorTheme__ltr"
-            dir="ltr"
-          >
+            dir="ltr">
             <span data-lexical-text="true">world</span>
           </a>
         </h1>
@@ -567,6 +538,133 @@ test.describe('Links', () => {
           <a dir="ltr" href="https://">
             <span data-lexical-text="true">Hello world</span>
           </a>
+        </p>
+      `,
+      {ignoreClasses: true},
+    );
+  });
+
+  test('Can handle pressing Enter inside a Link', async ({page}) => {
+    await focusEditor(page);
+    await page.keyboard.type('Hello awesome');
+    await selectAll(page);
+    await click(page, '.link');
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.type('world');
+
+    await moveToLineBeginning(page);
+    await moveRight(page, 6);
+
+    await page.keyboard.press('Enter');
+
+    await assertHTML(
+      page,
+      html`
+        <p dir="ltr">
+          <a dir="ltr" href="https://">
+            <span data-lexical-text="true">Hello</span>
+          </a>
+        </p>
+        <p dir="ltr">
+          <a dir="ltr" href="https://">
+            <span data-lexical-text="true">awesome</span>
+          </a>
+          <span data-lexical-text="true">world</span>
+        </p>
+      `,
+      {ignoreClasses: true},
+    );
+  });
+
+  test('Can handle pressing Enter inside a Link containing multiple TextNodes', async ({
+    page,
+  }) => {
+    await focusEditor(page);
+    await page.keyboard.type('Hello ');
+    await toggleBold(page);
+    await page.keyboard.type('awe');
+    await toggleBold(page);
+    await page.keyboard.type('some');
+    await selectAll(page);
+    await click(page, '.link');
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.type(' world');
+
+    await moveToLineBeginning(page);
+    await moveRight(page, 6);
+
+    await page.keyboard.press('Enter');
+
+    await assertHTML(
+      page,
+      html`
+        <p dir="ltr">
+          <a dir="ltr" href="https://">
+            <span data-lexical-text="true">Hello</span>
+          </a>
+        </p>
+        <p dir="ltr">
+          <a dir="ltr" href="https://">
+            <strong data-lexical-text="true">awe</strong>
+            <span data-lexical-text="true">some</span>
+          </a>
+          <span data-lexical-text="true">world</span>
+        </p>
+      `,
+      {ignoreClasses: true},
+    );
+  });
+
+  test('Can handle pressing Enter at the beginning of a Link', async ({
+    page,
+  }) => {
+    await focusEditor(page);
+    await page.keyboard.type('Hello awesome');
+    await selectAll(page);
+    await click(page, '.link');
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.type(' world');
+
+    await moveToLineBeginning(page);
+    await page.keyboard.press('Enter');
+
+    await assertHTML(
+      page,
+      html`
+        <p><br /></p>
+        <p dir="ltr">
+          <a dir="ltr" href="https://">
+            <span data-lexical-text="true">Hello awesome</span>
+          </a>
+          <span data-lexical-text="true">world</span>
+        </p>
+      `,
+      {ignoreClasses: true},
+    );
+  });
+
+  test('Can handle pressing Enter at the end of a Link', async ({page}) => {
+    await focusEditor(page);
+    await page.keyboard.type('Hello awesome');
+    await selectAll(page);
+    await click(page, '.link');
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.type(' world');
+
+    await moveLeft(page, 6);
+
+    await page.keyboard.press('Enter');
+
+    await assertHTML(
+      page,
+      html`
+        <p dir="ltr">
+          <a dir="ltr" href="https://">
+            <span data-lexical-text="true">Hello awesome</span>
+          </a>
+        </p>
+        <p dir="ltr">
+          <span data-lexical-text="true">world</span>
         </p>
       `,
       {ignoreClasses: true},

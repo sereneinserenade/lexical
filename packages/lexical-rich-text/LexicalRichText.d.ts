@@ -12,13 +12,16 @@ import type {
   LexicalNode,
   NodeKey,
   ParagraphNode,
+  HeadingNode,
 } from 'lexical';
+import {ElementNode} from 'lexical';
+
 export type InitialEditorStateType = null | string | EditorState | (() => void);
 
 export declare class QuoteNode extends ElementNode {
   static getType(): string;
   static clone(node: QuoteNode): QuoteNode;
-  constructor(key?: NodeKey): void;
+  constructor(key?: NodeKey);
   createDOM<EditorContext>(config: EditorConfig<EditorContext>): HTMLElement;
   updateDOM(prevNode: QuoteNode, dom: HTMLElement): boolean;
   insertNewAfter(): ParagraphNode;
@@ -31,7 +34,7 @@ export declare class HeadingNode extends ElementNode {
   __tag: HeadingTagType;
   static getType(): string;
   static clone(node: HeadingNode): HeadingNode;
-  constructor(tag: HeadingTagType, key?: NodeKey): void;
+  constructor(tag: HeadingTagType, key?: NodeKey);
   getTag(): HeadingTagType;
   createDOM<EditorContext>(config: EditorConfig<EditorContext>): HTMLElement;
   updateDOM(prevNode: HeadingNode, dom: HTMLElement): boolean;

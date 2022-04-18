@@ -6,6 +6,7 @@
  *
  */
 
+import {moveLeft} from '../keyboardShortcuts/index.mjs';
 import {
   assertHTML,
   assertSelection,
@@ -14,7 +15,9 @@ import {
   focusEditor,
   html,
   initialize,
-  selectFromInsertDropdown,
+  insertSampleImage,
+  insertUploadImage,
+  insertUrlImage,
   test,
   waitForSelector,
 } from '../utils/index.mjs';
@@ -33,7 +36,7 @@ test.describe('Images', () => {
     test.skip(isPlainText);
     await focusEditor(page);
 
-    await selectFromInsertDropdown(page, '.image');
+    await insertSampleImage(page);
 
     await waitForSelector(page, '.editor-image img');
 
@@ -44,13 +47,11 @@ test.describe('Images', () => {
           <span
             class="editor-image"
             contenteditable="false"
-            data-lexical-decorator="true"
-          >
+            data-lexical-decorator="true">
             <img
               src="${IMAGE_URL}"
               alt="Yellow flower in tilt shift lens"
-              style="height: inherit; max-width: 500px; width: inherit;"
-            />
+              style="height: inherit; max-width: 500px; width: inherit;" />
           </span>
           <br />
         </p>
@@ -96,7 +97,7 @@ test.describe('Images', () => {
       focusPath: [0],
     });
 
-    await selectFromInsertDropdown(page, '.image');
+    await insertSampleImage(page);
 
     await click(page, '.editor-image img');
 
@@ -107,14 +108,12 @@ test.describe('Images', () => {
           <span
             class="editor-image"
             contenteditable="false"
-            data-lexical-decorator="true"
-          >
+            data-lexical-decorator="true">
             <img
               src="${IMAGE_URL}"
               alt="Yellow flower in tilt shift lens"
               style="height: inherit; max-width: 500px; width: inherit;"
-              class="focused"
-            />
+              class="focused" />
             <button class="image-caption-button">Add Caption</button>
             <div class="image-resizer-ne"></div>
             <div class="image-resizer-se"></div>
@@ -138,7 +137,7 @@ test.describe('Images', () => {
 
     await click(page, 'div[contenteditable="true"]');
 
-    await selectFromInsertDropdown(page, '.image');
+    await insertSampleImage(page);
 
     await waitForSelector(page, '.editor-image img');
 
@@ -151,13 +150,11 @@ test.describe('Images', () => {
           <span
             class="editor-image"
             contenteditable="false"
-            data-lexical-decorator="true"
-          >
+            data-lexical-decorator="true">
             <img
               src="${IMAGE_URL}"
               alt="Yellow flower in tilt shift lens"
-              style="height: inherit; max-width: 500px; width: inherit;"
-            />
+              style="height: inherit; max-width: 500px; width: inherit;" />
           </span>
           <br />
         </p>
@@ -196,13 +193,12 @@ test.describe('Images', () => {
 
     await focusEditor(page);
 
-    await selectFromInsertDropdown(page, '.image');
+    await insertSampleImage(page);
 
-    await selectFromInsertDropdown(page, '.image');
+    await insertSampleImage(page);
 
     await focusEditor(page);
-    await page.keyboard.press('ArrowLeft');
-    await page.keyboard.press('ArrowLeft');
+    await moveLeft(page, 2);
 
     await assertHTML(
       page,
@@ -211,24 +207,20 @@ test.describe('Images', () => {
           <span
             class="editor-image"
             contenteditable="false"
-            data-lexical-decorator="true"
-          >
+            data-lexical-decorator="true">
             <img
               src="${IMAGE_URL}"
               alt="Yellow flower in tilt shift lens"
-              style="height: inherit; max-width: 500px; width: inherit;"
-            />
+              style="height: inherit; max-width: 500px; width: inherit;" />
           </span>
           <span
             class="editor-image"
             contenteditable="false"
-            data-lexical-decorator="true"
-          >
+            data-lexical-decorator="true">
             <img
               src="${IMAGE_URL}"
               alt="Yellow flower in tilt shift lens"
-              style="height: inherit; max-width: 500px; width: inherit;"
-            />
+              style="height: inherit; max-width: 500px; width: inherit;" />
           </span>
           <br />
         </p>
@@ -249,13 +241,11 @@ test.describe('Images', () => {
           <span
             class="editor-image"
             contenteditable="false"
-            data-lexical-decorator="true"
-          >
+            data-lexical-decorator="true">
             <img
               src="${IMAGE_URL}"
               alt="Yellow flower in tilt shift lens"
-              style="height: inherit; max-width: 500px; width: inherit;"
-            />
+              style="height: inherit; max-width: 500px; width: inherit;" />
           </span>
           <br />
         </p>
@@ -283,42 +273,36 @@ test.describe('Images', () => {
     });
 
     await page.keyboard.type('Test');
-    await selectFromInsertDropdown(page, '.image');
-    await selectFromInsertDropdown(page, '.image');
+    await insertSampleImage(page);
+    await insertSampleImage(page);
 
     await focusEditor(page);
-    await page.keyboard.press('ArrowLeft');
-    await page.keyboard.press('ArrowLeft');
+    await moveLeft(page, 2);
 
     await assertHTML(
       page,
       html`
         <p
           class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <span data-lexical-text="true">Test</span>
           <span
             class="editor-image"
             contenteditable="false"
-            data-lexical-decorator="true"
-          >
+            data-lexical-decorator="true">
             <img
               src="${IMAGE_URL}"
               alt="Yellow flower in tilt shift lens"
-              style="height: inherit; max-width: 500px; width: inherit;"
-            />
+              style="height: inherit; max-width: 500px; width: inherit;" />
           </span>
           <span
             class="editor-image"
             contenteditable="false"
-            data-lexical-decorator="true"
-          >
+            data-lexical-decorator="true">
             <img
               src="${IMAGE_URL}"
               alt="Yellow flower in tilt shift lens"
-              style="height: inherit; max-width: 500px; width: inherit;"
-            />
+              style="height: inherit; max-width: 500px; width: inherit;" />
           </span>
           <br />
         </p>
@@ -336,19 +320,16 @@ test.describe('Images', () => {
       html`
         <p
           class="PlaygroundEditorTheme__paragraph PlaygroundEditorTheme__ltr"
-          dir="ltr"
-        >
+          dir="ltr">
           <span data-lexical-text="true">Test</span>
           <span
             class="editor-image"
             contenteditable="false"
-            data-lexical-decorator="true"
-          >
+            data-lexical-decorator="true">
             <img
               src="${IMAGE_URL}"
               alt="Yellow flower in tilt shift lens"
-              style="height: inherit; max-width: 500px; width: inherit;"
-            />
+              style="height: inherit; max-width: 500px; width: inherit;" />
           </span>
           <br />
         </p>
@@ -360,5 +341,50 @@ test.describe('Images', () => {
       focusOffset: 4,
       focusPath: [0, 0, 0],
     });
+  });
+
+  test('Can add images by arbitrary URL', async ({page, isPlainText}) => {
+    test.skip(isPlainText);
+
+    await focusEditor(page);
+
+    await insertUrlImage(
+      page,
+      'https://lexical.dev/img/logo.svg',
+      'lexical logo',
+    );
+
+    await insertUploadImage(
+      page,
+      'packages/lexical-playground/src/images/yellow-flower-small.jpg',
+      'a pretty yellow flower :)',
+    );
+
+    await assertHTML(
+      page,
+      html`
+        <p class="PlaygroundEditorTheme__paragraph">
+          <span
+            class="editor-image"
+            contenteditable="false"
+            data-lexical-decorator="true">
+            <img
+              src="https://lexical.dev/img/logo.svg"
+              alt="lexical logo"
+              style="height: inherit; max-width: 500px; width: inherit;" />
+          </span>
+          <span
+            class="editor-image"
+            contenteditable="false"
+            data-lexical-decorator="true">
+            <img
+              src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QCMRXhpZgAATU0AKgAAAAgABQESAAMAAAABAAEAAAEaAAUAAAABAAAASgEbAAUAAAABAAAAUgEoAAMAAAABAAIAAIdpAAQAAAABAAAAWgAAAAAAAABIAAAAAQAAAEgAAAABAAOgAQADAAAAAQABAACgAgAEAAAAAQAAAAagAwAEAAAAAQAAAAcAAAAA/8IAEQgABwAGAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAMCBAEFAAYHCAkKC//EAMMQAAEDAwIEAwQGBAcGBAgGcwECAAMRBBIhBTETIhAGQVEyFGFxIweBIJFCFaFSM7EkYjAWwXLRQ5I0ggjhU0AlYxc18JNzolBEsoPxJlQ2ZJR0wmDShKMYcOInRTdls1V1pJXDhfLTRnaA40dWZrQJChkaKCkqODk6SElKV1hZWmdoaWp3eHl6hoeIiYqQlpeYmZqgpaanqKmqsLW2t7i5usDExcbHyMnK0NTV1tfY2drg5OXm5+jp6vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAQIAAwQFBgcICQoL/8QAwxEAAgIBAwMDAgMFAgUCBASHAQACEQMQEiEEIDFBEwUwIjJRFEAGMyNhQhVxUjSBUCSRoUOxFgdiNVPw0SVgwUThcvEXgmM2cCZFVJInotIICQoYGRooKSo3ODk6RkdISUpVVldYWVpkZWZnaGlqc3R1dnd4eXqAg4SFhoeIiYqQk5SVlpeYmZqgo6SlpqeoqaqwsrO0tba3uLm6wMLDxMXGx8jJytDT1NXW19jZ2uDi4+Tl5ufo6ery8/T19vf4+fr/2wBDAAIDAwMEAwQFBQQGBgYGBggIBwcICA0JCgkKCQ0TDA4MDA4MExEUEQ8RFBEeGBUVGB4jHRwdIyolJSo1MjVFRVz/2wBDAQIDAwMEAwQFBQQGBgYGBggIBwcICA0JCgkKCQ0TDA4MDA4MExEUEQ8RFBEeGBUVGB4jHRwdIyolJSo1MjVFRVz/2gAMAwEAAhEDEQAAAfBeXfV/i9n/2gAIAQEAAQUCmlT7p//aAAgBAxEBPwGWbIKo/wBmP+0f/9oACAECEQE/AYYoHddn7pf7V//aAAgBAQAGPwKFaUpWtZJJVUl//8QAMxABAAMAAgICAgIDAQEAAAILAREAITFBUWFxgZGhscHw0RDh8SAwQFBgcICQoLDA0OD/2gAIAQEAAT8hFyPFTveHPBl//9oADAMBAAIRAxEAABCL/8QAMxEBAQEAAwABAgUFAQEAAQEJAQARITEQQVFhIHHwkYGhsdHB4fEwQFBgcICQoLDA0OD/2gAIAQMRAT8QYOAdB9nP5t//2gAIAQIRAT8QEWh51X58fxf/2gAIAQEAAT8QJfU4BLBcKyeUzf/Z"
+              alt="a pretty yellow flower :)"
+              style="height: inherit; max-width: 500px; width: inherit;" />
+          </span>
+          <br />
+        </p>
+      `,
+    );
   });
 });

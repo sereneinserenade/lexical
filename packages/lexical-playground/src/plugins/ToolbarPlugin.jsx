@@ -7,7 +7,10 @@
  * @flow strict
  */
 
+import type {InsertImagePayload} from './ImagesPlugin';
 import type {LexicalEditor, RangeSelection} from 'lexical';
+
+import './ToolbarPlugin.css';
 
 import {
   $createCodeNode,
@@ -47,6 +50,7 @@ import {
   $isRangeSelection,
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
+  COMMAND_PRIORITY_CRITICAL,
   COMMAND_PRIORITY_LOW,
   ElementNode,
   FORMAT_ELEMENT_COMMAND,
@@ -64,12 +68,14 @@ import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 
 import useModal from '../hooks/useModal';
+import yellowFlowerImage from '../images/yellow-flower.jpg';
 import {$createStickyNode} from '../nodes/StickyNode';
 import Button from '../ui/Button';
 import DropDown from '../ui/DropDown';
-import Input from '../ui/Input';
+import FileInput from '../ui/FileInput.jsx';
 import KatexEquationAlterer from '../ui/KatexEquationAlterer';
 import LinkPreview from '../ui/LinkPreview';
+import TextInput from '../ui/TextInput';
 import {INSERT_EQUATION_COMMAND} from './EquationsPlugin';
 import {INSERT_EXCALIDRAW_COMMAND} from './ExcalidrawPlugin';
 import {INSERT_IMAGE_COMMAND} from './ImagesPlugin';
@@ -272,6 +278,138 @@ function FloatingLinkEditor({editor}: {editor: LexicalEditor}): React$Node {
   );
 }
 
+function InsertImageUriDialogBody({
+  onClick,
+}: {
+  onClick: (payload: InsertImagePayload) => void,
+}) {
+  const [src, setSrc] = useState('');
+  const [altText, setAltText] = useState('');
+
+  const isDisabled = src === '';
+
+  return (
+    <>
+      <TextInput
+        label="Image URL"
+        placeholder="i.e. https://source.unsplash.com/random"
+        onChange={setSrc}
+        value={src}
+        data-test-id="image-modal-url-input"
+      />
+      <TextInput
+        label="Alt Text"
+        placeholder="Random unsplash image"
+        onChange={setAltText}
+        value={altText}
+        data-test-id="image-modal-alt-text-input"
+      />
+      <div className="ToolbarPlugin__dialogActions">
+        <Button
+          data-test-id="image-modal-confirm-btn"
+          disabled={isDisabled}
+          onClick={() => onClick({altText, src})}>
+          Confirm
+        </Button>
+      </div>
+    </>
+  );
+}
+
+function InsertImageUploadedDialogBody({
+  onClick,
+}: {
+  onClick: (payload: InsertImagePayload) => void,
+}) {
+  const [src, setSrc] = useState('');
+  const [altText, setAltText] = useState('');
+
+  const isDisabled = src === '';
+
+  const loadImage = (files: File[]) => {
+    const reader = new FileReader();
+    reader.onload = function () {
+      if (typeof reader.result === 'string') {
+        setSrc(reader.result);
+      }
+      return '';
+    };
+    reader.readAsDataURL(files[0]);
+  };
+
+  return (
+    <>
+      <FileInput
+        label="Image Upload"
+        onChange={loadImage}
+        accept="image/*"
+        data-test-id="image-modal-file-upload"
+      />
+      <TextInput
+        label="Alt Text"
+        placeholder="Descriptive alternative text"
+        onChange={setAltText}
+        value={altText}
+        data-test-id="image-modal-alt-text-input"
+      />
+      <div className="ToolbarPlugin__dialogActions">
+        <Button
+          data-test-id="image-modal-file-upload-btn"
+          disabled={isDisabled}
+          onClick={() => onClick({altText, src})}>
+          Confirm
+        </Button>
+      </div>
+    </>
+  );
+}
+
+function InsertImageDialog({
+  activeEditor,
+  onClose,
+}: {
+  activeEditor: LexicalEditor,
+  onClose: () => void,
+}): React$Node {
+  const [mode, setMode] = useState<null | 'url' | 'file'>(null);
+
+  const onClick = (payload: InsertImagePayload) => {
+    activeEditor.dispatchCommand(INSERT_IMAGE_COMMAND, payload);
+    onClose();
+  };
+
+  return (
+    <>
+      {!mode && (
+        <div className="ToolbarPlugin__dialogButtonsList">
+          <Button
+            data-test-id="image-modal-option-sample"
+            onClick={() =>
+              onClick({
+                altText: 'Yellow flower in tilt shift lens',
+                src: yellowFlowerImage,
+              })
+            }>
+            Sample
+          </Button>
+          <Button
+            data-test-id="image-modal-option-url"
+            onClick={() => setMode('url')}>
+            URL
+          </Button>
+          <Button
+            data-test-id="image-modal-option-file"
+            onClick={() => setMode('file')}>
+            File
+          </Button>
+        </div>
+      )}
+      {mode === 'url' && <InsertImageUriDialogBody onClick={onClick} />}
+      {mode === 'file' && <InsertImageUploadedDialogBody onClick={onClick} />}
+    </>
+  );
+}
+
 function InsertTableDialog({
   activeEditor,
   onClose,
@@ -289,8 +427,8 @@ function InsertTableDialog({
 
   return (
     <>
-      <Input label="No of rows" onChange={setRows} value={rows} />
-      <Input label="No of columns" onChange={setColumns} value={columns} />
+      <TextInput label="No of rows" onChange={setRows} value={rows} />
+      <TextInput label="No of columns" onChange={setColumns} value={columns} />
       <div
         className="ToolbarPlugin__dialogActions"
         data-test-id="table-model-confirm-insert">
@@ -316,7 +454,11 @@ function InsertPollDialog({
 
   return (
     <>
-      <Input label="Poll Question" onChange={setQuestion} value={question} />
+      <TextInput
+        label="Poll Question"
+        onChange={setQuestion}
+        value={question}
+      />
       <div className="ToolbarPlugin__dialogActions">
         <Button disabled={question.trim() === ''} onClick={onClick}>
           Confirm
@@ -347,7 +489,7 @@ function InsertTweetDialog({
 
   return (
     <>
-      <Input
+      <TextInput
         label="Tweet URL"
         placeholder="i.e. https://twitter.com/jack/status/20"
         onChange={setText}
@@ -393,7 +535,7 @@ function InsertYouTubeDialog({
 
   return (
     <>
-      <Input
+      <TextInput
         label="YouTube URL"
         placeholder="i.e. https://www.youtube.com/watch?v=jNQXAC9IVRw"
         onChange={setText}
@@ -445,37 +587,15 @@ function BlockFormatDropDown({
     }
   };
 
-  const formatLargeHeading = () => {
-    if (blockType !== 'h1') {
+  const formatHeading = (headingSize) => {
+    if (blockType !== headingSize) {
       editor.update(() => {
         const selection = $getSelection();
 
         if ($isRangeSelection(selection)) {
-          $wrapLeafNodesInElements(selection, () => $createHeadingNode('h1'));
-        }
-      });
-    }
-  };
-
-  const formatSmallHeading = () => {
-    if (blockType !== 'h2') {
-      editor.update(() => {
-        const selection = $getSelection();
-
-        if ($isRangeSelection(selection)) {
-          $wrapLeafNodesInElements(selection, () => $createHeadingNode('h2'));
-        }
-      });
-    }
-  };
-
-  const formatVerySmallHeading = () => {
-    if (blockType !== 'h3') {
-      editor.update(() => {
-        const selection = $getSelection();
-
-        if ($isRangeSelection(selection)) {
-          $wrapLeafNodesInElements(selection, () => $createHeadingNode('h3'));
+          $wrapLeafNodesInElements(selection, () =>
+            $createHeadingNode(headingSize),
+          );
         }
       });
     }
@@ -540,17 +660,17 @@ function BlockFormatDropDown({
         <span className="text">Normal</span>
         {blockType === 'paragraph' && <span className="active" />}
       </button>
-      <button className="item" onClick={formatLargeHeading}>
+      <button className="item" onClick={() => formatHeading('h1')}>
         <span className="icon h1" />
         <span className="text">Heading 1</span>
         {blockType === 'h1' && <span className="active" />}
       </button>
-      <button className="item" onClick={formatSmallHeading}>
+      <button className="item" onClick={() => formatHeading('h2')}>
         <span className="icon h2" />
         <span className="text">Heading 2</span>
         {blockType === 'h2' && <span className="active" />}
       </button>
-      <button className="item" onClick={formatVerySmallHeading}>
+      <button className="item" onClick={() => formatHeading('h3')}>
         <span className="icon h3" />
         <span className="text">Heading 3</span>
         {blockType === 'h3' && <span className="active" />}
@@ -681,6 +801,18 @@ export default function ToolbarPlugin(): React$Node {
   }, [activeEditor]);
 
   useEffect(() => {
+    return editor.registerCommand(
+      SELECTION_CHANGE_COMMAND,
+      (_payload, newEditor) => {
+        updateToolbar();
+        setActiveEditor(newEditor);
+        return false;
+      },
+      COMMAND_PRIORITY_CRITICAL,
+    );
+  }, [editor, updateToolbar]);
+
+  useEffect(() => {
     return mergeRegister(
       activeEditor.registerUpdateListener(({editorState}) => {
         editorState.read(() => {
@@ -688,21 +820,12 @@ export default function ToolbarPlugin(): React$Node {
         });
       }),
       activeEditor.registerCommand(
-        SELECTION_CHANGE_COMMAND,
-        (_payload, newEditor) => {
-          updateToolbar();
-          setActiveEditor(newEditor);
-          return false;
-        },
-        COMMAND_PRIORITY_LOW,
-      ),
-      activeEditor.registerCommand(
         CAN_UNDO_COMMAND,
         (payload) => {
           setCanUndo(payload);
           return false;
         },
-        COMMAND_PRIORITY_LOW,
+        COMMAND_PRIORITY_CRITICAL,
       ),
       activeEditor.registerCommand(
         CAN_REDO_COMMAND,
@@ -710,7 +833,7 @@ export default function ToolbarPlugin(): React$Node {
           setCanRedo(payload);
           return false;
         },
-        COMMAND_PRIORITY_LOW,
+        COMMAND_PRIORITY_CRITICAL,
       ),
     );
   }, [activeEditor, updateToolbar]);
@@ -912,7 +1035,12 @@ export default function ToolbarPlugin(): React$Node {
             </button>
             <button
               onClick={() => {
-                activeEditor.dispatchCommand(INSERT_IMAGE_COMMAND);
+                showModal('Insert Image', (onClose) => (
+                  <InsertImageDialog
+                    activeEditor={activeEditor}
+                    onClose={onClose}
+                  />
+                ));
               }}
               className="item">
               <i className="icon image" />

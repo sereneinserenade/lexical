@@ -30,6 +30,7 @@ export async function initialize({
   isCollab,
   isCharLimit,
   isCharLimitUtf8,
+  showNestedEditorTreeView,
 }) {
   const appSettings = {};
   appSettings.isRichText = IS_RICH_TEXT;
@@ -39,7 +40,7 @@ export async function initialize({
     appSettings.isCollab = isCollab;
     appSettings.collabId = uuidv4();
   }
-  if (appSettings.showNestedEditorTreeView === undefined) {
+  if (showNestedEditorTreeView === undefined) {
     appSettings.showNestedEditorTreeView = true;
   }
   appSettings.isCharLimit = !!isCharLimit;
@@ -443,19 +444,48 @@ export async function clearEditor(page) {
   await page.keyboard.press('Backspace');
 }
 
-export async function insertImage(page, caption = null) {
+export async function insertSampleImage(page) {
   await selectFromInsertDropdown(page, '.image');
-  await waitForSelector(page, '.editor-image img');
+  await click(page, 'button[data-test-id="image-modal-option-sample"]');
+}
 
-  if (caption !== null) {
-    await click(page, '.editor-image img');
-    await click(page, '.image-caption-button');
-    await waitForSelector(page, '.editor-image img.focused', {
-      state: 'detached',
-    });
-    await focusEditor(page, '.image-caption-container');
-    await page.keyboard.type(caption);
+export async function insertUrlImage(page, url, altText) {
+  await selectFromInsertDropdown(page, '.image');
+  await click(page, 'button[data-test-id="image-modal-option-url"]');
+  await focus(page, 'input[data-test-id="image-modal-url-input"]');
+  await page.keyboard.type(url);
+  if (altText) {
+    await focus(page, 'input[data-test-id="image-modal-alt-text-input"]');
+    await page.keyboard.type(altText);
   }
+  await click(page, 'button[data-test-id="image-modal-confirm-btn"]');
+}
+
+export async function insertUploadImage(page, files, altText) {
+  await selectFromInsertDropdown(page, '.image');
+  await click(page, 'button[data-test-id="image-modal-option-file"]');
+
+  const frame = IS_COLLAB ? await page.frame('left') : page;
+  await frame.setInputFiles(
+    'input[data-test-id="image-modal-file-upload"]',
+    files,
+  );
+
+  if (altText) {
+    await focus(page, 'input[data-test-id="image-modal-alt-text-input"]');
+    await page.keyboard.type(altText);
+  }
+  await click(page, 'button[data-test-id="image-modal-file-upload-btn"]');
+}
+
+export async function insertImageCaption(page, caption) {
+  await click(page, '.editor-image img');
+  await click(page, '.image-caption-button');
+  await waitForSelector(page, '.editor-image img.focused', {
+    state: 'detached',
+  });
+  await focusEditor(page, '.image-caption-container');
+  await page.keyboard.type(caption);
 }
 
 export async function dragMouse(page, firstBoundingBox, secondBoundingBox) {

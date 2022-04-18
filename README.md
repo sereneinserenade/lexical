@@ -1,6 +1,21 @@
-# Lexical
+<h1 align="center">
+  <a href="https://lexical.dev">Lexical</a>
+</h1>
 
-> Note: Lexical is currently in early development and APIs and packages are likely to change quite often.
+<p align="center">
+  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/facebook/lexical/Lexical%20Tests">
+  <a href="https://www.npmjs.com/package/lexical">
+    <img alt="Visit the NPM page" src="https://img.shields.io/npm/v/lexical"> 
+  </a>
+  <a href="https://discord.gg/KmG4wQnnD9">
+    <img alt="Add yourself to our Discord" src="https://img.shields.io/discord/953974421008293909">
+  </a>
+  <a href="https://twitter.com/intent/follow?screen_name=lexicaljs">
+    <img alt="Follow us on Twitter" src="https://img.shields.io/twitter/follow/lexicaljs?style=social">
+  </a>
+</p>
+
+**⚠️ Lexical is currently in early development and APIs and packages are likely to change quite often.**
 
 Lexical is an extensible JavaScript web text-editor framework with an emphasis on reliability, accessibility and performance. Lexical aims to provide a best-in-class developer experience, so you can easily prototype and build features with confidence. Combined with a highly extensible architecture, Lexical allows developers to create unique text editing experiences that scale in size and functionality.
 
@@ -8,7 +23,7 @@ For documentation and more information about Lexical, be sure to [visit the Lexi
 
 Here are some examples of what you can do with Lexical:
 
-- [Lexical Playground](https://lexical-playground.vercel.app/)
+- [Lexical Playground](https://playground.lexical.dev)
 - [Plain text sandbox](https://codesandbox.io/s/lexical-plain-text-example-g932e)
 - [Rich text sandbox](https://codesandbox.io/s/lexical-rich-text-example-5tncvy)
 
@@ -97,7 +112,7 @@ function Editor() {
 ## Lexical is a framework
 
 The core of Lexical is a dependency-free text editor framework that allows developers to build powerful, simple and complex,
-editor surfaces. Lexical's has a few concepts that are worth exploring:
+editor surfaces. Lexical has a few concepts that are worth exploring:
 
 ### Editor instances
 
